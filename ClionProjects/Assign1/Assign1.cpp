@@ -8,10 +8,6 @@ double e (int n);
 double pi (int n);
 double factorial (int n);
 void help();
-int sizeOf(char* array)
-{
-
-}
 
 int main(int argc, char* args[])
 {
