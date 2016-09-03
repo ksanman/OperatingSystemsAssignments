@@ -1,5 +1,5 @@
 #include <iostream>
-#include<cstring>
+#include<string>
 #include<cmath>
 
 // Prototypes
@@ -101,7 +101,7 @@ double pi (int n)
     double pi = 0.0;
 
     // Using Chudnovskys; algorithm, find pi.
-    for(auto i = 0.0; i<n;++i)
+    for(double i = 0.0; i<n;++i)
     {
         pi += (std::pow(-1.0, i) * factorial(6.0 * i) * (13591409.0 + (54140134.0 * i))) / (factorial(3.0 * i) * pow(factorial(i), 3.0)*pow(640320.0, 3.0 * i + 3.0/2.0));
     }
@@ -128,7 +128,6 @@ double factorial(int n)
 
 void help()
 {
-    int input;
     std::cout<< "--- Assign 1 Help ---\n"
         << " -fib [n] : Compute the fibonacci of [n]. [n] may be 0 - 40\n"
         << " -e [n] : compute the value of 'e' using [n] iterations. [n] may be 0 - 30\n"
