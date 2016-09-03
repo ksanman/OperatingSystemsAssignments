@@ -1,3 +1,9 @@
+/*
+*Kody Sanchez
+*A01514541
+*Assignment 1
+*/
+
 #include <iostream>
 #include<string>
 #include<cmath>
@@ -45,7 +51,7 @@ int main(int argc, char* args[])
 
         }
 
-        std::cout << e(numberOfIterations) << std::endl;
+        std::cout << std::Setprecision(30) << e(numberOfIterations) << std::endl;
     }
     else if(functionToBeCalled == "-pi")
     {
