@@ -51,7 +51,7 @@ int main(int argc, char* args[])
 
         }
 
-        std::cout << std::Setprecision(30) << e(numberOfIterations) << std::endl;
+        std::cout << std::setprecision(numberOfIterations) << e(numberOfIterations) << std::endl;
     }
     else if(functionToBeCalled == "-pi")
     {
@@ -61,7 +61,7 @@ int main(int argc, char* args[])
             return 0;
         }
 
-        std::cout << std::setprecision(10) <<  pi(numberOfIterations) << std::endl;
+        std::cout << std::setprecision(numberOfIterations) <<  pi(numberOfIterations) << std::endl;
     }
     else
     {
