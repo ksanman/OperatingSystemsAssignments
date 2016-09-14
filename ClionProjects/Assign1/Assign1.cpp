@@ -8,6 +8,7 @@
 #include<string>
 #include<cmath>
 #include <iomanip>
+#include <exception>
 
 // Prototypes
 int fib(int n);
@@ -18,56 +19,61 @@ void help();
 
 int main(int argc, char* args[])
 {
+	try
+	{
+		if (argc < 1)
+		{
+			help();
+			return 0;
+		}
 
-    if(argc < 1)
-    {
-        help();
-        return 0;
-    }
+		std::string functionToBeCalled = args[1];
+		int numberOfIterations = std::stoi(args[2]);
 
-    std::string functionToBeCalled = args[1];
-    int numberOfIterations = std::stoi(args[2]);
+		if (functionToBeCalled == "" || numberOfIterations == 0)
+		{
+			help();
+		}
+		else if (functionToBeCalled == "-fib")
+		{
+			if (numberOfIterations < 0 || numberOfIterations > 40)
+			{
+				help();
+				return 0;
+			}
 
-    if(functionToBeCalled == "" || numberOfIterations == 0)
-    {
-        help();
-    }
-    else if(functionToBeCalled == "-fib")
-    {
-        if(numberOfIterations < 0 || numberOfIterations > 40)
-        {
-            help();
-            return 0;
-        }
+			std::cout << fib(numberOfIterations) << std::endl;
+		}
+		else if (functionToBeCalled == "-e")
+		{
+			if (numberOfIterations < 0 || numberOfIterations > 30)
+			{
+				help();
+				return 0;
 
-        std::cout << fib(numberOfIterations) << std::endl;
-    }
-    else if(functionToBeCalled == "-e")
-    {
-        if(numberOfIterations < 0 || numberOfIterations > 30)
-        {
-            help();
-            return 0;
+			}
 
-        }
+			std::cout << std::setprecision(numberOfIterations) << e(numberOfIterations) << std::endl;
+		}
+		else if (functionToBeCalled == "-pi")
+		{
+			if (numberOfIterations < 0 || numberOfIterations > 10)
+			{
+				help();
+				return 0;
+			}
 
-        std::cout << std::setprecision(numberOfIterations) << e(numberOfIterations) << std::endl;
-    }
-    else if(functionToBeCalled == "-pi")
-    {
-        if(numberOfIterations < 0 || numberOfIterations > 10)
-        {
-            help();
-            return 0;
-        }
-
-        std::cout << std::setprecision(numberOfIterations) <<  pi(numberOfIterations) << std::endl;
-    }
-    else
-    {
-        help();
-    }
-
+			std::cout << std::setprecision(numberOfIterations) << pi(numberOfIterations) << std::endl;
+		}
+		else
+		{
+			help();
+		}
+	}
+	catch (...)
+	{
+		help();
+	}
     return 0;
 }
 
