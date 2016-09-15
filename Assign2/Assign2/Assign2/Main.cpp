@@ -86,7 +86,7 @@ void help()
 	std::cout << "--- Assign 1 Help ---\n"
 		<< " -fib [n] : Compute the fibonacci of [n]. [n] may be 0 - 40\n"
 		<< " -e [n] : compute the value of 'e' using [n] iterations. [n] may be 0 - 30\n"
-		<< " -pi [n] : Compute Pi to [n] digits. [n] may be 0 - 10"
+		<< " -pi [n] : Compute Pi to [n] digits. [n] may be 0 - 10\n" 
 		<< " Press any key to continue..."
 		<< std::endl;
 
