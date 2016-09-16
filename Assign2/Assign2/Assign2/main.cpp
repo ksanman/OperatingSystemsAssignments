@@ -9,9 +9,9 @@
 #include<cmath>
 #include <iomanip>
 #include <exception>
-#include "Fib.h"
-#include "e.h"
-#include "pi.h"
+#include "compute-fib.h"
+#include "compute-e.h"
+#include "compute-pi.h"
 
 // Prototypes
 void help();
