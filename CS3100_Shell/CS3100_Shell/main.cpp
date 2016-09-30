@@ -92,19 +92,24 @@ int main() {
 
 				// Set the first position of the argv char array to the commandString command.
 				argv[0] = new char[commandString.size()];
+<<<<<<< HEAD
 				strcpy(argv[0], commandString.c_str());
+=======
+				strcpy_s(argv[0],commandString.size() + 1, commandString.c_str());	
+>>>>>>> 665211dc5726c3a63ae8c68464113269e4f73352
 
 				// for each element in the queue, if the exist, add it to the argv char array. 
 				for (int i = 1; i < argvSize; ++i)
 				{
 					argv[i] = new char[inputQueue.front().size()];
-					strcpy(argv[i], inputQueue.front().c_str());
+					strcpy_s(argv[i],inputQueue.front().size() + 1, inputQueue.front().c_str());
 					inputQueue.pop();
 				}
 
 				// Set the last position to null. 
 				argv[argvSize] = NULL;
 
+<<<<<<< HEAD
 				// Fork the process
 				auto process = fork();
 				if(process < 0)
@@ -122,6 +127,10 @@ int main() {
 					execvp(argv[0], argv);
 					exit(-1);
 				}
+=======
+				// Call execvp
+				//execvp(argv[0], argv);
+>>>>>>> 665211dc5726c3a63ae8c68464113269e4f73352
 
 				// Clear the queue
 				clearQueue(inputQueue);
