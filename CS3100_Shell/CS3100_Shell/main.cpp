@@ -1,9 +1,13 @@
 #include <iostream>
 #include <chrono>
 #include <queue>
-#include <string>
+#include <string.h>
+#include <stdlib.h>
 #include <exception>
 #include <vector>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <iomanip>
 
 std::queue<std::string> constructQueue(std::string);
 void clearQueue(std::queue<std::string>&);
@@ -47,12 +51,12 @@ int main() {
 			{
 				std::chrono::time_point<std::chrono::high_resolution_clock> end = std::chrono::high_resolution_clock::now();
 				std::chrono::duration<double> time = end - start;
-				std::cout << "Time spent executing processes: " << time.count() << " seconds" << std::endl;
+				std::cout << std::fixed << std::setprecision(4)<< "Time spent executing processes: " << time.count() << " seconds" << std::endl;
 				clearQueue(inputQueue);
 			}
 			else if (commandString == "history")
 			{
-				for each (auto var in historyQueue)
+				for (auto &var : historyQueue)
 				{
 					int size = var.size();
 					for (int i = 0; i < size; ++i)
@@ -88,7 +92,7 @@ int main() {
 
 				// Set the first position of the argv char array to the commandString command.
 				argv[0] = new char[commandString.size()];
-				strcpy(argv[0], commandString.c_str());	
+				strcpy(argv[0], commandString.c_str());
 
 				// for each element in the queue, if the exist, add it to the argv char array. 
 				for (int i = 1; i < argvSize; ++i)
@@ -101,12 +105,27 @@ int main() {
 				// Set the last position to null. 
 				argv[argvSize] = NULL;
 
-				// Call execvp
-				execvp(argv[0], argv);
+				// Fork the process
+				auto process = fork();
+				if(process < 0)
+				{
+					/* error forking */
+					// If the fork fails, log to the console and return fail.
+					std::cout << "Invalid Input" << std::endl;
+				}
+				else if(process > 0)
+				{
+					wait(NULL);
+				}
+				else{
+					// Call execvp
+					execvp(argv[0], argv);
+					exit(-1);
+				}
 
-				// If that fails, something went wrong. Clear the queue and display the error message. 
+				// Clear the queue
 				clearQueue(inputQueue);
-				std::cout << "Invalid Input" << std::endl;
+
 			}
 		}
 	}
