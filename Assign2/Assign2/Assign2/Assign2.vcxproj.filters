@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="compute-e.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Fib.cpp">
+    <ClCompile Include="compute-fib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="e.cpp">
+    <ClCompile Include="compute-pi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pi.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Fib.h">
+    <ClInclude Include="compute-e.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="e.h">
+    <ClInclude Include="compute-Fib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pi.h">
+    <ClInclude Include="compute-pi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

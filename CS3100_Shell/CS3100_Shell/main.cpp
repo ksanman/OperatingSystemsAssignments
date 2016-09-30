@@ -88,13 +88,13 @@ int main() {
 
 				// Set the first position of the argv char array to the commandString command.
 				argv[0] = new char[commandString.size()];
-				strcpy(argv[0], commandString.c_str());	
+				strcpy_s(argv[0],commandString.size() + 1, commandString.c_str());	
 
 				// for each element in the queue, if the exist, add it to the argv char array. 
 				for (int i = 1; i < argvSize; ++i)
 				{
 					argv[i] = new char[inputQueue.front().size()];
-					strcpy(argv[i], inputQueue.front().c_str());
+					strcpy_s(argv[i],inputQueue.front().size() + 1, inputQueue.front().c_str());
 					inputQueue.pop();
 				}
 
@@ -102,7 +102,7 @@ int main() {
 				argv[argvSize] = NULL;
 
 				// Call execvp
-				execvp(argv[0], argv);
+				//execvp(argv[0], argv);
 
 				// If that fails, something went wrong. Clear the queue and display the error message. 
 				clearQueue(inputQueue);

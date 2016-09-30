@@ -146,15 +146,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="e.cpp" />
-    <ClCompile Include="Fib.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="pi.cpp" />
+    <ClCompile Include="compute-e.cpp" />
+    <ClCompile Include="compute-fib.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="compute-pi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="e.h" />
-    <ClInclude Include="Fib.h" />
-    <ClInclude Include="pi.h" />
+    <ClInclude Include="compute-e.h" />
+    <ClInclude Include="compute-Fib.h" />
+    <ClInclude Include="compute-pi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
