@@ -57,7 +57,7 @@ int main() {
 			}
 			else if (commandString == "history")
 			{
-				int count = o;
+				int count = 0;
 				for (auto &var : historyQueue)
 				{
 					int size = var.size();
