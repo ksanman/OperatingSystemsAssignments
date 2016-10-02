@@ -61,7 +61,11 @@ int main() {
 					int size = var.size();
 					for (int i = 0; i < size; ++i)
 					{
+<<<<<<< HEAD
 						std::cout <<  i << ": " << var.front() << " ";
+=======
+						std::cout << i << ":  " <<  var.front() << std::endl;
+>>>>>>> 242c2f52fa4cd051c0232c7ccbab235045568612
 						var.pop();
 					}
 				}
@@ -93,10 +97,14 @@ int main() {
 				// Set the first position of the argv char array to the commandString command.
 				argv[0] = new char[commandString.size()];
 
+<<<<<<< HEAD
 				strcpy(argv[0], commandString.c_str());
 
 				strcpy(argv[0], commandString.c_str());
 
+=======
+				strcpy(argv[0], commandString.c_str());
+>>>>>>> 242c2f52fa4cd051c0232c7ccbab235045568612
 
 				// for each element in the queue, if the exist, add it to the argv char array. 
 				for (int i = 1; i < argvSize; ++i)
@@ -111,6 +119,7 @@ int main() {
 
 				// Fork the process
 				int pid = fork();
+<<<<<<< HEAD
 				if(pid == -1)
 				{
 					/* error forking */
@@ -118,6 +127,17 @@ int main() {
 					std::cout << "Fork failed." << std::endl;
 				}
 				else if(pid > 0)
+=======
+				if(pid  == -1)
+				{
+					/* error forking */
+					// If the fork fails, log to the console and return fail.
+					std::cout << "Invalid Input" << std::endl;
+					
+
+				}
+				else if(pid  > 0)
+>>>>>>> 242c2f52fa4cd051c0232c7ccbab235045568612
 				{
 					int status;
 					waitpid(pid, &status, 0);
@@ -127,7 +147,14 @@ int main() {
 					execvp(argv[0], argv);
 					std::cout << "Invaild command" << std::endl;
 					exit(-1);
+					// The command failed. 
+					std::cout<< "Invalid or unrecognized command" << std::endl;
+
 				}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 242c2f52fa4cd051c0232c7ccbab235045568612
 				// Clear the queue
 				clearQueue(inputQueue);
 
