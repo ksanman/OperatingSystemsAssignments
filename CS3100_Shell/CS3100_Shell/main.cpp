@@ -57,14 +57,18 @@ int main() {
 			}
 			else if (commandString == "history")
 			{
+				int count = o;
 				for (auto &var : historyQueue)
 				{
 					int size = var.size();
 					for (int i = 0; i < size; ++i)
 					{
-						std::cout << i << ":  " <<  var.front() << std::endl;
+						std::cout << count  << ":  " <<  var.front() << " ";
 						var.pop();
 					}
+					std::cout << std::endl;
+					count++;
+			
 				}
 				clearQueue(inputQueue);
 			}
