@@ -73,13 +73,23 @@ int main() {
 			else if (commandString.find('^') != std::string::npos)
 			{
 				std::string index = "";
+				std::string numbers;
 				int findIndex = 0;
-				for (int i = 1; i < commandString.size(); ++i)
+				for (int i = 1; i <=inputQueue.size(); ++i)
 				{
-					index += commandString[i];
+					numbers = inputQueue[i];
+					index += numbers;
+
+				}
+				if(index < "0")
+				{
+					std::cout << "Invalid input" << std::endl;
+					inputQueue.clear();
+					continue;
 				}
 
 				findIndex = std::stoi(index);
+
 				if(findIndex >= historyQueue.size())
 				{
 					std::cout << "History index out of range" << std::endl;
