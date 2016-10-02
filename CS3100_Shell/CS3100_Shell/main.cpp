@@ -96,7 +96,7 @@ int main() {
 
 				strcpy(argv[0], commandString.c_str());
 
-=
+
 
 				// for each element in the queue, if the exist, add it to the argv char array. 
 				for (int i = 1; i < argvSize; ++i)
