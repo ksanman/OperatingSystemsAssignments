@@ -51,7 +51,7 @@ int main() {
 			{
 				std::chrono::time_point<std::chrono::high_resolution_clock> end = std::chrono::high_resolution_clock::now();
 				std::chrono::duration<double> time = end - start;
-				std::cout << std::fixed << std::setprecision(4)<< "Time spent executing processes: " << time.count() << " seconds" << std::endl;
+				std::cout << std::setprecision(4)<< "Time spent executing processes: " << time.count() << " seconds" << std::endl;
 				clearQueue(inputQueue);
 			}
 			else if (commandString == "history")
@@ -61,7 +61,7 @@ int main() {
 					int size = var.size();
 					for (int i = 0; i < size; ++i)
 					{
-						std::cout << var.front() << " ";
+						std::cout <<  i << ": " << var.front() << " ";
 						var.pop();
 					}
 				}
@@ -92,46 +92,42 @@ int main() {
 
 				// Set the first position of the argv char array to the commandString command.
 				argv[0] = new char[commandString.size()];
-<<<<<<< HEAD
+
 				strcpy(argv[0], commandString.c_str());
-=======
-				strcpy_s(argv[0],commandString.size() + 1, commandString.c_str());	
->>>>>>> 665211dc5726c3a63ae8c68464113269e4f73352
+
+				strcpy(argv[0], commandString.c_str());
+
 
 				// for each element in the queue, if the exist, add it to the argv char array. 
 				for (int i = 1; i < argvSize; ++i)
 				{
 					argv[i] = new char[inputQueue.front().size()];
-					strcpy_s(argv[i],inputQueue.front().size() + 1, inputQueue.front().c_str());
+					strcpy(argv[i], inputQueue.front().c_str());
 					inputQueue.pop();
 				}
 
 				// Set the last position to null. 
 				argv[argvSize] = NULL;
 
-<<<<<<< HEAD
 				// Fork the process
-				auto process = fork();
-				if(process < 0)
+				int pid = fork();
+				if(pid == -1)
 				{
 					/* error forking */
 					// If the fork fails, log to the console and return fail.
-					std::cout << "Invalid Input" << std::endl;
+					std::cout << "Fork failed." << std::endl;
 				}
-				else if(process > 0)
+				else if(pid > 0)
 				{
-					wait(NULL);
+					int status;
+					waitpid(pid, &status, 0);
 				}
 				else{
 					// Call execvp
 					execvp(argv[0], argv);
+					std::cout << "Invaild command" << std::endl;
 					exit(-1);
 				}
-=======
-				// Call execvp
-				//execvp(argv[0], argv);
->>>>>>> 665211dc5726c3a63ae8c68464113269e4f73352
-
 				// Clear the queue
 				clearQueue(inputQueue);
 
