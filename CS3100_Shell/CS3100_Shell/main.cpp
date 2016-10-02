@@ -10,16 +10,15 @@
 #include <sys/wait.h>
 #include <iomanip>
 
-std::queue<std::string> constructQueue(std::string);
-void clearQueue(std::queue<std::string>&);
+std::vector<std::string> constructQueue(std::string);
 
 int main() {
 
 	//  queue contains the commands to be executed. 
-	std::queue<std::string> inputQueue;
+	std::vector<std::string> inputQueue;
 
 	// This vector stores a history of all commands used. 
-	std::vector<std::queue<std::string>> historyQueue;
+	std::vector<std::vector<std::string>> historyQueue;
 
 	// String of commands inputed by the user. 
 	std::string inputString;
@@ -41,11 +40,11 @@ int main() {
 		{
 			std::string commandString = inputQueue.front();
 			historyQueue.push_back(inputQueue);
-			inputQueue.pop();
+			inputQueue.pop_back();
 
 			if (commandString == "exit")
 			{
-				clearQueue(inputQueue);
+				inputQueue.clear();
 				return 0;
 			}
 			else if (commandString == "ptime")
@@ -53,24 +52,23 @@ int main() {
 				std::chrono::time_point<std::chrono::high_resolution_clock> end = std::chrono::high_resolution_clock::now();
 				std::chrono::duration<double> time = end - start;
 				std::cout << std::setprecision(4)<< "Time spent executing processes: " << time.count() << " seconds" << std::endl;
-				clearQueue(inputQueue);
+				inputQueue.clear();
 			}
 			else if (commandString == "history")
 			{
-				int count = 0;
+				int count = 1;
 				for (auto &var : historyQueue)
 				{
 					int size = var.size();
 					for (int i = 0; i < size; ++i)
 					{
-						std::cout << count  << ":  " <<  var.front() << " ";
-						var.pop();
+						std::cout << count  << ":  " <<  var[i] << " ";
 					}
 					std::cout << std::endl;
 					count++;
 			
 				}
-				clearQueue(inputQueue);
+				inputQueue.clear();
 			}
 			else if (commandString.find('^') != std::string::npos)
 			{
@@ -82,8 +80,22 @@ int main() {
 				}
 
 				findIndex = std::stoi(index);
+				if(findIndex >= historyQueue.size())
+				{
+					std::cout << "History index out of range" << std::endl;
+					inputQueue.clear();
+				}
+				else
+				{
+					inputQueue.clear();
+					auto tmpQueue = historyQueue[findIndex - 1];
 
-				inputQueue = historyQueue[findIndex - 1];
+					for(int i = 0; i < tmpQueue.size(); ++i)
+					{
+						inputQueue.push_back(tmpQueue.front());
+						tmpQueue.pop_back();
+					}
+				}
 			}
 			else
 			{
@@ -107,7 +119,7 @@ int main() {
 				{
 					argv[i] = new char[inputQueue.front().size()];
 					strcpy(argv[i], inputQueue.front().c_str());
-					inputQueue.pop();
+					inputQueue.pop_back();
 				}
 
 				// Set the last position to null. 
@@ -136,7 +148,7 @@ int main() {
 
 				}
 				// Clear the queue
-				clearQueue(inputQueue);
+				inputQueue.clear();
 
 			}
 		}
@@ -146,9 +158,9 @@ int main() {
 	return 0;
 }
 
-std::queue<std::string> constructQueue(std::string input)
+std::vector<std::string> constructQueue(std::string input)
 {
-	std::queue<std::string> returnedQueue;
+	std::vector<std::string> returnedQueue;
 	std::string stringToPush;
 	bool isEndOfFile = false;
 
@@ -156,20 +168,15 @@ std::queue<std::string> constructQueue(std::string input)
 	{
 		if (input[i] == ' ')
 		{
-			returnedQueue.push(stringToPush);
+			returnedQueue.push_back(stringToPush);
 			stringToPush.clear();
 		}
 		else
 			stringToPush += input[i];
 	}
 	
-	returnedQueue.push(stringToPush);
+	returnedQueue.push_back(stringToPush);
 
 	return returnedQueue;
 }
 
-void clearQueue(std::queue<std::string>& queue)
-{
-	while (!queue.empty())
-		queue.pop();
-}
