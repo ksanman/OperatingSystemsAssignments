@@ -13,6 +13,7 @@
 #include <signal.h>
 
 std::deque<std::string> constructQueue(std::string);
+std::deque<std::deque<std::string>> parseCommandString(std::deque<std::string>);
 int indexLocation(std::deque<std::string>, std::string);
 extern "C" void ctrlcHandler(int SignalID);
 
@@ -57,34 +58,42 @@ int main() {
 
 			if(std::find(inputQueue.begin(), inputQueue.end(), "|") != inputQueue.end())
 			{
+				inputQueue.push_front(commandString);
+
 				int pids[PIPE_COUNT];
 				pipe(pids);
 
 				int savedStdout = dup(STDOUT);
 				int savedStdin = dup(STDIN);
+				std::deque<std::deque<std::string>> parsedQueue = parseCommandString(inputQueue);
+				std::deque<std::string> pipeBefore = parsedQueue[0];
+				std::deque<std::string> pipeAfter = parsedQueue[1];
 
 				pid_t pid = fork();
 				if(pid == 0)
 				{
+					close(pids[PIPE_READ_END]);
 					dup2(pids[PIPE_WRITE_END], STDOUT);
 
 					// Set the size of the argv array size. If there is nothing in the queue, it is one. If there are objects in the queue, it is the queue size plus one.
-					auto argvSize = (inputQueue.size() > 0) ? inputQueue.size() + 1 : 1;
+					auto argvSize = (pipeBefore.size() > 0) ? pipeBefore.size() + 1 : 1;
 
 					// Instantiate the argv char array.
-					char** argv = new char*[argvSize + 1];
+					char** argv = new char*[argvSize];
 
-					// Set the first position of the argv char array to the commandString command.
-					argv[0] = new char[commandString.size()];
+//					// Set the first position of the argv char array to the commandString command.
+//					argv[0] = new char[commandString.size()];
+//
+//					strcpy(argv[0], commandString.c_str());
 
-					strcpy(argv[0], commandString.c_str());
+					//location = indexLocation(inputQueue, "|");
 
 					// for each element in the queue, if the exist, add it to the argv char array.
-					for (int i = 1; i < argvSize && inputQueue[i] != "|"; ++i)
+					for (int i = 0; i < pipeBefore.size(); ++i)
 					{
-						argv[i] = new char[inputQueue.front().size()];
-						strcpy(argv[i], inputQueue.front().c_str());
-						inputQueue.pop_front();
+						argv[i] = new char[pipeBefore[i].size()];
+						strcpy(argv[i], pipeBefore[i].c_str());
+
 					}
 
 					// Set the last position to null.
@@ -92,42 +101,35 @@ int main() {
 
 					// Call execvp
 					execvp(argv[0], argv);
-
 				}
 
 				pid_t pid2 = fork();
 				if(pid2 == 0)
 				{
-					dup2(pids[PIPE_READ_END], STDIN);
-
 					close(pids[PIPE_WRITE_END]);
 
+					dup2(pids[PIPE_READ_END], STDIN);
+
+
+
 					// Set the size of the argv array size. If there is nothing in the queue, it is one. If there are objects in the queue, it is the queue size plus one.
-					auto argvSize = (inputQueue.size() > 0) ? inputQueue.size() + 1 : 1;
+					auto argvSize = (pipeAfter.size() > 0) ? pipeAfter.size() + 1 : 1;
 
 					// Instantiate the argv char array.
-					char** argv = new char*[argvSize + 1];
+					char** argv = new char*[argvSize];
 
-					// Set the first position of the argv char array to the commandString command.
-					argv[0] = new char[commandString.size()];
+//					// Set the first position of the argv char array to the commandString command.
+//					argv[0] = new char[commandString.size()];
+//
+//					strcpy(argv[0], commandString.c_str());
 
-					strcpy(argv[0], commandString.c_str());
-
-					int location = indexLocation(inputQueue, "|");
-
-					if(location == -1)
-					{
-						inputQueue.clear();
-						std::cout << "Unknown error occured" << std::endl;
-						continue;
-					}
+					//location = indexLocation(inputQueue, "|");
 
 					// for each element in the queue, if the exist, add it to the argv char array.
-					for (int i = location + 1; i < argvSize; ++i)
+					for (int i = 0; i < pipeAfter.size(); ++i)
 					{
-						argv[i] = new char[inputQueue.front().size()];
-						strcpy(argv[i], inputQueue.front().c_str());
-						inputQueue.pop_front();
+						argv[i] = new char[pipeAfter[i].size()];
+						strcpy(argv[i], pipeAfter[i].c_str());
 					}
 
 					// Set the last position to null.
@@ -334,6 +336,36 @@ int indexLocation(std::deque<std::string> container, std::string target)
 	}
 
 	return -1;
+}
+
+std::deque<std::deque<std::string>> parseCommandString(std::deque<std::string> queue)
+{
+	std::deque<std::deque<std::string>> returnQueue;
+	std::deque<std::string> queue1;
+	std::deque<std::string> queue2;
+	int location = 0;
+
+	for(int i = 0; i< queue.size(); i++)
+	{
+		if(queue[i] == "|") {
+			location = i;
+			break;
+		}
+
+		queue1.push_back(queue[i]);
+	}
+
+	for(int i = location + 1; i < queue.size(); i++)
+	{
+		queue2.push_back(queue[i]);
+	}
+
+	returnQueue.push_back(queue1);
+	returnQueue.push_back(queue2);
+	return returnQueue;
+
+
+
 }
 
 extern "C" void ctrlcHandler(int SignalID)
