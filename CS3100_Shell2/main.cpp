@@ -193,10 +193,11 @@ int main() {
 				int count = 1;
 				for (auto &var : historyQueue)
 				{
+					std::cout << count << ": ";
 					int size = var.size();
 					for (int i = 0; i < size; ++i)
 					{
-						std::cout << count  << ":  " <<  var[i] << " ";
+						std::cout <<  var[i] << " ";
 					}
 					std::cout << std::endl;
 					count++;
