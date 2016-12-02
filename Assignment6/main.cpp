@@ -14,6 +14,7 @@ std::vector<int> generateSequence(int, int, int);
 void initiateThreads(int, int, std::vector<std::vector<int>>, std::unordered_map<int, std::vector<int>>&);
 void detectAnomily(int, int, int, std::vector<int>&, std::vector<int>&, std::unordered_map<int, std::vector<int>>&, std::unordered_map<int, bool>, std::mutex&);
 void printResults(std::unordered_map<int, std::vector<int>>);
+void printStats(std::vector<int>&, std::vector<int>&, int&, std::mutex&);
 std::unordered_map<int, bool> makeHashTable(int);
 
 int main() {
@@ -125,9 +126,12 @@ void detectAnomily(int runNumber, int numberOfFrames, int sequenceNumber, std::v
 }
 
 void printResults(std::unordered_map<int, std::vector<int>> results) {
+    std::mutex mutex;
     std::unordered_map<int, std::vector<int>> anomilies(results.size());
     int numberOfAnomilies = 0;
-
+    auto hardware = std::thread();
+    int numberOfThreads = hardware.hardware_concurrency();
+    std::vector<std::thread> threads(numberOfThreads);
     std::cout << "Length of reference string: 1000" << std::endl << "Frames of physical memory: 100" << std::endl << std::endl;
 
     for (int i = 1; i <=results.size() - 1; i++)
@@ -138,17 +142,31 @@ void printResults(std::unordered_map<int, std::vector<int>> results) {
         auto result1 = results[i];
         auto result2 = results[i + 1];
 
-
-        if (result1[2] < result2[2])
+        for(auto& e : threads)
         {
-            std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << results[i].at(0)
-            << std::endl << "	Page faults: " << results[i].at(2) << " @ Frame size: " << results[i].at(1)
-            << std::endl << "	Page faults: " << results[i + 1].at(2) << " @ Frame size: " << results[i + 1].at(1) << std::endl;
-            numberOfAnomilies++;
+            e = std::thread(&printStats, std::ref(result1), std::ref(result2), std::ref(numberOfAnomilies), std::ref(mutex));
         }
+        for(auto& e : threads)
+        {
+            e.join();
+        }
+
     }
 
     std::cout << std::endl << "Anomily detected : " << numberOfAnomilies << " times." <<  std::endl;
+}
+
+void printStats(std::vector<int> &result1, std::vector<int> &result2, int& numberOfAnomilies, std::mutex &mutex)
+{
+    std::unique_lock<std::mutex> lock(mutex);
+    if (result1[2] < result2[2])
+    {
+        std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << result1[0]
+        << std::endl << "	Page faults: " << result1[2] << " @ Frame size: " << result1[1]
+        << std::endl << "	Page faults: " << result2[2] << " @ Frame size: " << result2[1] << std::endl;
+        numberOfAnomilies++;
+    }
+
 }
 
 std::unordered_map<int, bool> makeHashTable(int size) {
