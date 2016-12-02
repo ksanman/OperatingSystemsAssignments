@@ -110,9 +110,8 @@ void detectAnomily(int runNumber, int numberOfFrames, int sequenceNumber, std::v
         else
         {
             pageFault++;
-            auto deleted = queue.front();
+            hashTable[ queue.front() - 1] = false;
             queue.pop_front();
-            hashTable[deleted - 1] = false;
             queue.push_back(request);
             hashTable[request - 1] = true;
         }
@@ -125,12 +124,7 @@ void detectAnomily(int runNumber, int numberOfFrames, int sequenceNumber, std::v
 }
 
 void printResults(std::unordered_map<int, std::vector<int>> results) {
-    std::mutex mutex;
-    std::unordered_map<int, std::vector<int>> anomilies(results.size());
     int numberOfAnomilies = 0;
-    auto hardware = std::thread();
-    int numberOfThreads = hardware.hardware_concurrency();
-    std::vector<std::thread> threads(numberOfThreads);
     std::cout << "Length of reference string: 1000" << std::endl << "Frames of physical memory: 100" << std::endl << std::endl;
 
     for (int i = 1; i <=results.size() - 1; i++)
@@ -143,9 +137,9 @@ void printResults(std::unordered_map<int, std::vector<int>> results) {
 
         if (result1[2] < result2[2])
         {
-            std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << result1[0]
-            << std::endl << "	Page faults: " << result1[2] << " @ Frame size: " << result1[1]
-            << std::endl << "	Page faults: " << result2[2] << " @ Frame size: " << result2[1] << std::endl;
+            std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << results[i][0]
+            << std::endl << "	Page faults: " << results[i][2] << " @ Frame size: " << results[i][1]
+            << std::endl << "	Page faults: " << results[i+1][2] << " @ Frame size: " << results[i+1][1] << std::endl;
             numberOfAnomilies++;
         }
 
