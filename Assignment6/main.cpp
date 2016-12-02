@@ -39,7 +39,7 @@ int main() {
 	}
 
 	// Set up threads
-	numberOfAnomolties = initiateThreads(maxNumberOfFrames, endPage, sequences, results, numberOfAnomolties);
+	numberOfAnomolties = initiateThreads(maxNumberOfFrames, endPage, sequences, results);
 
 
 	// Each thread will run an instance of the paging test, reporting back paging faults.
