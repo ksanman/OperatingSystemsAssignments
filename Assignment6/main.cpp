@@ -125,16 +125,22 @@ void detectAnomily(int runNumber, int numberOfFrames, int sequenceNumber, std::v
 	stats[1] = numberOfFrames;
 	stats[2] = pageFault;
 	results[runNumber] = stats;
+	
 
 	if (runNumber == 1)
 		return;
+
+	auto result1 = results[runNumber - 1];
 
 	if (sequenceNumber > results[runNumber - 1][0])
 		return;
 
 	if (pageFault > results[runNumber - 1][2])
 	{
-		printResults(results[runNumber - 1], pageFault, numberOfFrames);
+		//printResults(results[runNumber - 1], pageFault, numberOfFrames);
+		std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << sequenceNumber
+			<< std::endl << "	Page faults: " << result1[2] << " @ Frame size: " << result1[1]
+			<< std::endl << "	Page faults: " << pageFault << " @ Frame size: " << numberOfFrames << std::endl;
 		++numberOfAnomolties;
 	}
 
