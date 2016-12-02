@@ -11,7 +11,7 @@
 
 // Prototypes
 std::vector<int> generateSequence(int, int, int);
-void initiateThreads(int, int, std::vector<std::vector<int>>, std::unordered_map<int, std::vector<int>>&, int&);
+void initiateThreads(int, int, std::vector<std::vector<int>>, std::unordered_map<int, std::vector<int>>&);
 void detectAnomily(int, int, int, std::vector<int>&, std::vector<int>&, std::unordered_map<int, std::vector<int>>&, std::unordered_map<int, bool>, int& ,std::mutex&);
 void printResults(std::vector<int>, int, int);
 std::unordered_map<int, bool> makeHashTable(int);
@@ -39,7 +39,7 @@ int main() {
 	}
 
 	// Set up threads
-	initiateThreads(maxNumberOfFrames, endPage, sequences, results, numberOfAnomolties);
+	numberOfAnomolties = initiateThreads(maxNumberOfFrames, endPage, sequences, results, numberOfAnomolties);
 
 
 	// Each thread will run an instance of the paging test, reporting back paging faults.
@@ -67,8 +67,9 @@ std::vector<int> generateSequence(int begin, int end, int size) {
 	return sequence;
 }
 
-void initiateThreads(int numberOfFrames, int numberOfPages, std::vector<std::vector<int>> sequences, std::unordered_map<int, std::vector<int>> &results, int &numberOfAnomolties) {
+int initiateThreads(int numberOfFrames, int numberOfPages, std::vector<std::vector<int>> sequences, std::unordered_map<int, std::vector<int>> &results) {
 	std::mutex mutex;
+	int numberOfAnomilties;
 	std::vector<int> stats(3); // index 1 is sequence number, index 2 is the frame number, index 3 is the number of page faults
 
 	std::unordered_map<int, bool> hashTable = makeHashTable(numberOfPages);
