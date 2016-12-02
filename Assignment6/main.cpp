@@ -14,7 +14,6 @@ std::vector<int> generateSequence(int, int, int);
 void initiateThreads(int, int, std::vector<std::vector<int>>, std::unordered_map<int, std::vector<int>>&);
 void detectAnomily(int, int, int, std::vector<int>&, std::vector<int>&, std::unordered_map<int, std::vector<int>>&, std::unordered_map<int, bool>, std::mutex&);
 void printResults(std::unordered_map<int, std::vector<int>>);
-void printStats(std::vector<int>&, std::vector<int>&, int&, std::mutex&);
 std::unordered_map<int, bool> makeHashTable(int);
 
 int main() {
@@ -142,13 +141,12 @@ void printResults(std::unordered_map<int, std::vector<int>> results) {
         auto result1 = results[i];
         auto result2 = results[i + 1];
 
-        for(auto& e : threads)
+        if (result1[2] < result2[2])
         {
-            e = std::thread(&printStats, std::ref(result1), std::ref(result2), std::ref(numberOfAnomilies), std::ref(mutex));
-        }
-        for(auto& e : threads)
-        {
-            e.join();
+            std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << result1[0]
+            << std::endl << "	Page faults: " << result1[2] << " @ Frame size: " << result1[1]
+            << std::endl << "	Page faults: " << result2[2] << " @ Frame size: " << result2[1] << std::endl;
+            numberOfAnomilies++;
         }
 
     }
@@ -156,18 +154,6 @@ void printResults(std::unordered_map<int, std::vector<int>> results) {
     std::cout << std::endl << "Anomily detected : " << numberOfAnomilies << " times." <<  std::endl;
 }
 
-void printStats(std::vector<int> &result1, std::vector<int> &result2, int& numberOfAnomilies, std::mutex &mutex)
-{
-    std::unique_lock<std::mutex> lock(mutex);
-    if (result1[2] < result2[2])
-    {
-        std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << result1[0]
-        << std::endl << "	Page faults: " << result1[2] << " @ Frame size: " << result1[1]
-        << std::endl << "	Page faults: " << result2[2] << " @ Frame size: " << result2[1] << std::endl;
-        numberOfAnomilies++;
-    }
-
-}
 
 std::unordered_map<int, bool> makeHashTable(int size) {
     std::unordered_map<int, bool> hashtable(size);
