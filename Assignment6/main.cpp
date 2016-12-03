@@ -107,8 +107,8 @@ int initiateThreads(int numberOfFrames, int numberOfPages, std::vector<std::vect
 			if (result1[1] > result2[1])
 			{
 				std::cout << "Anomily discovered!" << std::endl << "	Sequence number: " << i
-					<< std::endl << "	Page faults: " << result1[1] << " @ Frame size: " << result1[0]
-					<< std::endl << "	Page faults: " << result2[1] << " @ Frame size: " << result2[0] << std::endl;
+					<< std::endl << "	Page faults: " << result2[1] << " @ Frame size: " << result2[0]
+					<< std::endl << "	Page faults: " << result1[1] << " @ Frame size: " << result1[0] << std::endl;
 				++numberOfAnomilties;
 			}
 		}
